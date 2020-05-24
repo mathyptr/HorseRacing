@@ -9,11 +9,13 @@ import javax.imageio.ImageIO;
 
 public class horse extends Thread{
 	private java.util.Vector <BufferedImage> imgb =new java.util.Vector(1,1);
-
-	private int num,posx, posy,indeximg,speed;
+	private movement step;
+	private int end, num,posx, posy,indeximg,speed;
 	
-	public horse(int num) {
+	public horse(int num,int end, movement step) {
 		this.num=num;
+		this.end=end;
+		this.step=step;
 		this.setName("Cavallo "+this.num);
 		posx=0;
 		posy=0;
@@ -59,8 +61,8 @@ public class horse extends Thread{
 	
 	public void setPosX(Integer posx) {
 		
-		if(posx>=0)
-			this.posx=posx-speed;
+		if(posx<end)
+			this.posx=posx+speed;
 	}
 	public void  setPosY(Integer posy) {
 		 this.posy=posy;
@@ -69,10 +71,23 @@ public class horse extends Thread{
 		this.speed=speed;
 	}
 	
-	
+	public void move() {
+		
+		if(posx<end)
+			this.posx=posx+1+speed;
+	}	
 	public void run() {
-		for(int i=1;i<=100;i++) {
-			System.out.println(Thread.currentThread().getName()+" giro "+i);
+		int valore;
+		while(posx<end) {
+			 valore = step.get();
+			 move();
+			 try {
+				sleep(500);
+			} catch (InterruptedException e) {
+				
+			}
+//			 System.out.println("-Consumatore #"+this.number+"get:"+valore);
+//			System.out.println(Thread.currentThread().getName()+" giro "+i);
 		}	
 		System.out.println(Thread.currentThread().getName()+" ARRIVATO");
 	}
