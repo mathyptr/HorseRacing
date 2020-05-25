@@ -11,10 +11,10 @@ import javax.swing.JFrame;
 
 public class HorseRacing extends JFrame {
 
-    public HorseRacing(int n) {
+    public HorseRacing() {
    	
     	
-        add(new race(n));
+        add(new race());
                         
         setResizable(false);
         pack();
@@ -26,21 +26,8 @@ public class HorseRacing extends JFrame {
 
     public static void main(String[] args) {
         
-    	int  n=10;
-		InputStreamReader input = new InputStreamReader(System.in);
-		BufferedReader tastiera = new BufferedReader(input);
-		System.out.println("Quanti cavalli sono presenti alla gara?");
-		try {
-			n=(Integer.valueOf(tastiera.readLine()).intValue());
-		}
-	    catch (Exception e){
-		   System.out.println("errore input 1");
-	    }
-		final Integer numehorse = new Integer(n);
-		
-		
         EventQueue.invokeLater(() -> {
-            JFrame ex = new HorseRacing(numehorse);
+            JFrame ex = new HorseRacing();
             ex.setVisible(true);
         });
     }

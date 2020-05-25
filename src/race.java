@@ -6,7 +6,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -25,14 +28,18 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 
-public class race extends JPanel  {
+public class race extends JPanel  implements ActionListener{
 
     private final int B_WIDTH = 600;
     private final int B_HEIGHT = 600;
@@ -51,24 +58,42 @@ public class race extends JPanel  {
 	private weather weat;
     private int numhorse=0;
     private int indeximage=0;
-   
+    private boolean start=false;
     private Timer timer;
     private int x, y;
+    private String atmo;
    
- 
-    
-    public race(int n) {
- 	  	  step=new movement();
-       	  numhorse=n;
+ 	JPopupMenu popup = new JPopupMenu();
+	JMenuBar menuBar = new JMenuBar();
+	ImageIcon exitIcon = new ImageIcon("src/resources/exit.png");
+	BufferedImage imagebkg=null;
+	
+	JMenu fileMenu = new JMenu("Opzioni");
+	private JPanel panHorse= new JPanel();
+	private JButton btnCambia = new JButton("Scegli");
+	private JTextField numhorseField = new JTextField("10",2);
+	private JComboBox atmoCombo = new JComboBox();
+	private JComboBox bkgCombo = new JComboBox();
+
+    public race() {
+     	numhorse=10;	  	        
+    	
+        Menu();
+   //     startRace();
+    }
+
+    private void startRace() {
+  		start=true;
+  		 
+    	  step=new movement();
        	  end=B_WIDTH;
     	 //       setBackground(Color.BLACK);
        	  Color co= new Color(170,218,24);
          setBackground(co);    	
          setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-         MenuBar();
          initDefaultSpeed();
          initHorses();
-         weat = new weather(B_WIDTH,B_HEIGHT,width,height);
+         weat = new weather(B_WIDTH,B_HEIGHT,width,height,atmo);
          
        		try {     
   //  		    InputStream is=getClass().getResourceAsStream("/music/horse.wav");
@@ -87,62 +112,89 @@ public class race extends JPanel  {
          y = INITIAL_Y;
          
          timer = new Timer();
-         timer.scheduleAtFixedRate(new ScheduleTask(),INITIAL_DELAY, PERIOD_INTERVAL);        
+         timer.scheduleAtFixedRate(new ScheduleTask(),INITIAL_DELAY, PERIOD_INTERVAL);
+    }
+    
+    private void Menu() {
+
+   // 	  Color co= new Color(170,218,24);
+    //   setBackground(co);    	
+ //      panHorse.setLayout(null);
+       setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
+//       numhorseField.setBounds(50,50,10,10);
+//       btnCambia.setBounds(100,100,10,10);
+       atmoCombo.addItem("sole");
+       atmoCombo.addItem("pioggia");
+       atmoCombo.addItem("tempesta");
+       atmoCombo.addItem("neve");
+       panHorse.add(atmoCombo);
+       bkgCombo.addItem("sabbia");
+       bkgCombo.addItem("terra");
+       bkgCombo.addItem("erba");
+       bkgCombo.addItem("roccia");
+       bkgCombo.addItem("ghiaccio");
+       bkgCombo.addItem("asfalto");
+       panHorse.add(bkgCombo);
+       panHorse.add(numhorseField);
+        panHorse.add(btnCambia);
+        panHorse.setVisible(true);
+        this.add(panHorse);
+        btnCambia.addActionListener(this);
     }
 
+  
+    
+    public void actionPerformed(ActionEvent e)
+    { 
+    	String pulsante=e.getActionCommand();
+    	
+    	if(pulsante.contentEquals("Scegli"))
+    	{  	
+    		loadBKGimg();
+    	    numhorse=Integer.valueOf(numhorseField.getText());
+    	    atmo=atmoCombo.getSelectedItem().toString();
+       	    if(numhorse<2)
+        	    JOptionPane.showMessageDialog(this,"Al minimo cavalli sono 2","Attenzione",JOptionPane.WARNING_MESSAGE);  
+       	    else if(numhorse>10)
+       	    	JOptionPane.showMessageDialog(this,"Al massimo i cavalli sono 10","Attenzione",JOptionPane.WARNING_MESSAGE);	
+    	    else
+    		{	    	
+ //   	    btnCambia.setVisible(false);
+ //   	    numhorseField.setVisible(false);
+    	    	panHorse.setVisible(false);    	    	
+    			startRace();
+    	//	System.exit(0);
+    		}	
+    	}		
+    }  
     
 
-    private void MenuBar() {
-    	JPopupMenu popup = new JPopupMenu();
-    	  
-    	JMenuBar menuBar = new JMenuBar();
-    	ImageIcon exitIcon = new ImageIcon("src/resources/exit.png");
-
-    	JMenu fileMenu = new JMenu("Opzioni");
-        fileMenu.setMnemonic(KeyEvent.VK_F);
-
-        JMenuItem eMenuItem1 = new JMenuItem("Exit", exitIcon);
-        eMenuItem1.setMnemonic(KeyEvent.VK_E);
-        eMenuItem1.setToolTipText("Exit application");
-        eMenuItem1.addActionListener((event) -> System.exit(0));
-
-        JMenuItem eMenuItem2 = new JMenuItem("Cavallo", exitIcon);
-        eMenuItem2.setMnemonic(KeyEvent.VK_C);
-        eMenuItem2.setToolTipText("Cavallo");
-        eMenuItem2.addActionListener((event) -> System.exit(0));
-
-        JMenuItem eMenuItem3 = new JMenuItem("Fantino", exitIcon);
-        eMenuItem3.setMnemonic(KeyEvent.VK_F);
-        eMenuItem3.setToolTipText("Fantino");
-        eMenuItem3.addActionListener((event) -> System.exit(0));
-
-        JMenuItem eMenuItem4 = new JMenuItem("Percorso", exitIcon);
-        eMenuItem4.setMnemonic(KeyEvent.VK_P);
-        eMenuItem4.setToolTipText("Percorso");
-        eMenuItem4.addActionListener((event) -> System.exit(0));
-
-        JMenuItem eMenuItem5 = new JMenuItem("Cond atmosferiche", exitIcon);
-        eMenuItem5.setMnemonic(KeyEvent.VK_A);
-        eMenuItem5.setToolTipText("Cond atmo");
-        eMenuItem5.addActionListener((event) -> System.exit(0));
-
-        JMenuItem eMenuItem6 = new JMenuItem("Sound off", exitIcon);
-        eMenuItem6.setMnemonic(KeyEvent.VK_O);
-        eMenuItem6.setToolTipText("Sound off");
-        eMenuItem6.addActionListener((event) -> System.exit(0));
-
-        
-        fileMenu.add(eMenuItem1);
-        fileMenu.add(eMenuItem2);
-        fileMenu.add(eMenuItem3);
-        fileMenu.add(eMenuItem4);
-        fileMenu.add(eMenuItem5);
-        menuBar.add(fileMenu);
-//        popup.add(eMenuItem);
-//        this.setJMenuBar(menuBar);
-        this.add(menuBar);
-//        this.add(popup);
-    }
+    private void loadBKGimg()
+   	{  	
+    	String bkgstr,filebkg=null;
+    	bkgstr=bkgCombo.getSelectedItem().toString();
+		
+		if(bkgstr.contentEquals("sabbia"))
+			filebkg="/img/bkg/sand.jpg";		
+		else if(bkgstr.contentEquals("terra"))
+			filebkg="/img/bkg/field.jpg";
+		else if(bkgstr.contentEquals("erba"))
+			filebkg="/img/bkg/green.jpg";
+		else if(bkgstr.contentEquals("asfalto"))
+			filebkg="/img/bkg/railroad.jpg";
+		else if(bkgstr.contentEquals("roccia"))
+			filebkg="/img/bkg/rock.jpg";
+		else if(bkgstr.contentEquals("ghiaccio"))
+			filebkg="/img/bkg/ice.jpg";
+	
+		try {
+			if(filebkg!=null)
+				imagebkg=(BufferedImage) ImageIO.read(getClass().getResourceAsStream(filebkg));    					
+		} catch (IOException e1) {
+		// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+}
     
 	private void initDefaultSpeed(){
 		speedhorse.add(4);
@@ -171,10 +223,30 @@ public class race extends JPanel  {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawCorsie(g);
-        drawHorse(g);
-        drawWater(g);
+        if(start) {
+        	drawBackground(g);
+        	drawCorsie(g);
+        	drawHorse(g);
+        	drawWater(g);
+        	drawNumber(g);
+        }
     }
+    
+    private void drawNumber(Graphics g) {
+		try {
+			
+	        g.drawImage((BufferedImage) ImageIO.read(getClass().getResourceAsStream("/img/num/1.png")), 560, 240, this);
+
+		} catch (IOException e1) {
+		// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+//        g.drawImage(imagebkg, 100, 100, this);
+
+	}
+    private void drawBackground(Graphics g) {
+        g.drawImage(imagebkg, 0, 0, this);
+	}  
     
     private void drawHorse(Graphics g) {
     	Image hh;
@@ -202,9 +274,9 @@ public class race extends JPanel  {
     private void drawCorsie(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
 
-        float[] dash1 = { 2f, 0f, 2f };
+        float[] dash1 = { 4f, 0f, 4f };
 
-        BasicStroke bs1 = new BasicStroke(1, 
+        BasicStroke bs1 = new BasicStroke((float) 2.5, 
             BasicStroke.CAP_BUTT, 
             BasicStroke.JOIN_ROUND, 
             1.0f, 
