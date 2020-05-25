@@ -3,6 +3,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
@@ -23,10 +24,11 @@ public class weather {
      }
 	 
 	 private void Init()  {
+		 ResourceBundle m= MessagesBundle.GetResourceBundle();
 		 int i,j;
 	    	try {
 	    		String fileAtmo=null;
-	    		if(type.equals("pioggia"))
+	    		if(type.equals("pioggia")||type.equals("tempesta"))
 	    			fileAtmo="/img/atmo/rain.png";
 	    		else if(type.equals("neve"))
 	    			fileAtmo="/img/atmo/snow.png";

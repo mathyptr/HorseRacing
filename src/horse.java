@@ -9,8 +9,10 @@ import javax.imageio.ImageIO;
 
 public class horse extends Thread{
 	private java.util.Vector <BufferedImage> imgb =new java.util.Vector(1,1);
+	private java.util.Vector <Integer> speedhorse =new java.util.Vector(1,1);
+
 	private movement step;
-	private int end, num,posx, posy,indeximg,speed;
+	private int end, num,posx, posy,indeximg,speed,finalpos;
 	
 	public horse(int num,int end, movement step) {
 		this.num=num;
@@ -19,11 +21,25 @@ public class horse extends Thread{
 		this.setName("Cavallo "+this.num);
 		posx=0;
 		posy=0;
-		speed=0;		
+		finalpos=0;		
 		indeximg=0;
 		loadImage();
+		initDefaultSpeed();
+		speed=speedhorse.get((int)(Math.random()*10));
 	   
 	}
+	private void initDefaultSpeed(){
+		speedhorse.add(4);
+		speedhorse.add(5);
+		speedhorse.add(8);
+		speedhorse.add(10);
+		speedhorse.add(12);
+		speedhorse.add(14);
+		speedhorse.add(16);
+		speedhorse.add(18);
+		speedhorse.add(19);
+		speedhorse.add(20);		
+	  }	
 
 	private void loadImage() {
 		try {
@@ -55,8 +71,13 @@ public class horse extends Thread{
 		return posy;
 	}
 	public BufferedImage getImage() {
-		indeximg=indeximg%imgb.size()+1;
-		return imgb.get(indeximg-1);		
+	
+		if(posx<end)
+			indeximg=(indeximg+1)%imgb.size();
+		return imgb.get(indeximg);		
+			
+	//		indeximg=indeximg%imgb.size()+1;
+	//		return imgb.get(indeximg-1);		
 	}	
 	
 	public void setPosX(Integer posx) {
@@ -70,11 +91,20 @@ public class horse extends Thread{
 	public void setspeed(Integer speed) {
 		this.speed=speed;
 	}
-	
+	public void SetFinalPosition(int finalpos){
+		this.finalpos=finalpos;
+	}
+	public int GetFinalPosition()	{
+		return  finalpos;
+	}
 	public void move() {
-		
+		int n;
+		n=posx+1+speed;
 		if(posx<end)
-			this.posx=posx+1+speed;
+			if(n>end)
+				posx=end;
+			else
+				posx=n;
 	}	
 	public void run() {
 		int valore;
