@@ -6,13 +6,25 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
-
+/**
+ * descrizione
+ * @author Patrissi Mathilde
+ *
+ */
 public class weather {
 	 
 	 private int width,height,tilewidth,tileheight;
 	 private Image imgBase,thunder=null;
 	 private BufferedImage bkg;
-	 private String type;
+	 private String type="atmo_sun";
+	 
+	 /**Costruttore della classe weather
+	  * @param width int
+	  * @param height int
+	  * @param tilewidth int
+	  * @param  tileheight int
+	  * @param type String
+	  */
 	 
 	 public weather(int width, int height,int tilewidth, int tileheight,String type) {
 		 this.width=width;
@@ -23,20 +35,23 @@ public class weather {
 		 Init();
      }
 	 
+	 /**Metodo per l'inizializzazione del meteo
+	  * @exception eccezione di I/O
+	  */
+	
 	 private void Init()  {
-		 ResourceBundle m= MessagesBundle.GetResourceBundle();
 		 int i,j;
 	    	try {
 	    		String fileAtmo=null;
-	    		if(type.equals("pioggia")||type.equals("tempesta"))
+	    		if(type.equals("atmo_rain")||type.equals("atmo_stormwind"))
 	    			fileAtmo="/img/atmo/rain.png";
-	    		else if(type.equals("neve"))
+	    		else if(type.equals("atmo_snow"))
 	    			fileAtmo="/img/atmo/snow.png";
 	  
 	    		if(fileAtmo!=null)
 	    			imgBase=ImageIO.read(getClass().getResourceAsStream(fileAtmo)).getScaledInstance(tilewidth/5, tileheight/5,Image.SCALE_SMOOTH);
 //		   		rain=ImageIO.read(getClass().getResourceAsStream("/img/atmo/snow.png")).getScaledInstance(tilewidth/5, tileheight/5,Image.SCALE_SMOOTH);
-		   		if(type.equals("tempesta"))
+		   		if(type.equals("atmo_stormwind"))
 		   			thunder= ImageIO.read(getClass().getResourceAsStream("/img/atmo/lampo.png")).getScaledInstance(tilewidth/2, tileheight/2,Image.SCALE_SMOOTH);
 				bkg =(BufferedImage) ImageIO.read(getClass().getResourceAsStream("/img/atmo/trasparente.png"));//.getScaledInstance(width/2, height/2,Image.SCALE_SMOOTH);
 	
@@ -47,6 +62,9 @@ public class weather {
    
 	    }
 	 
+	 /** Metodo per la realizzazione del background con il meteo
+	  * @exception eccezione di I/O
+     */
 	  public void buildWeather()  {
 	    	int px,py;
 	    	int i,j;
@@ -83,6 +101,9 @@ public class weather {
 	   
 	    }
 	  
+	  /**Metodo che restituisce il background con il meteo
+	   * @return il background con il meteo
+		 */
 		public Image getImage() {
 			
 			return bkg;//bkg.getScaledInstance(-1, -1,Image.SCALE_SMOOTH);		

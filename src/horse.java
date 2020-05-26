@@ -5,7 +5,10 @@ import java.io.File;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
-
+/**
+ * descrizione
+ * @author Patrissi Mathilde
+ */
 
 public class horse extends Thread{
 	private java.util.Vector <BufferedImage> imgb =new java.util.Vector(1,1);
@@ -13,6 +16,7 @@ public class horse extends Thread{
 
 	private movement step;
 	private int end, num,posx, posy,indeximg,speed,finalpos;
+	private String name;
 	
 	public horse(int num,int end, movement step) {
 		this.num=num;
@@ -26,6 +30,8 @@ public class horse extends Thread{
 		loadImage();
 		initDefaultSpeed();
 		speed=speedhorse.get((int)(Math.random()*10));
+		MessagesBundle msgB=new MessagesBundle();
+		name=msgB.GetResourceValue("name_horse"+num);
 	   
 	}
 	private void initDefaultSpeed(){
@@ -63,7 +69,10 @@ public class horse extends Thread{
 			   System.out.println("errore input");
 		 }
 		 indeximg=(int)(Math.random()*5);
-	}		
+	}	
+	public String getHorseName() {
+		return name;
+	}
 	public Integer getPosX() {
 		return posx;
 	}
