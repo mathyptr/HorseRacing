@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
+
+import javax.imageio.ImageIO;
 /**
  * descrizione
  * @author Patrissi Mathilde
@@ -17,15 +19,13 @@ public class weather {
 	 private Image imgBase,thunder=null;
 	 private BufferedImage bkg;
 	 private String type="atmo_sun";
-	 
 	 /**Costruttore della classe weather
 	  * @param width int
 	  * @param height int
 	  * @param tilewidth int
 	  * @param  tileheight int
 	  * @param type String
-	  */
-	 
+	  */	 
 	 public weather(int width, int height,int tilewidth, int tileheight,String type) {
 		 this.width=width;
 		 this.height =height;
@@ -34,11 +34,9 @@ public class weather {
 		 this.type=type;
 		 Init();
      }
-	 
 	 /**Metodo per l'inizializzazione del meteo
 	  * @exception eccezione di I/O
 	  */
-	
 	 private void Init()  {
 		 int i,j;
 	    	try {
@@ -61,10 +59,10 @@ public class weather {
 			}
    
 	    }
-	 
-	 /** Metodo per la realizzazione del background con il meteo
-	  * @exception eccezione di I/O
-     */
+
+/** Metodo per la realizzazione del background con il meteo
+ * @exception eccezione di I/O
+     */ 
 	  public void buildWeather()  {
 	    	int px,py;
 	    	int i,j;
@@ -100,10 +98,9 @@ public class weather {
 //				g.drawImage(image, 0,0, this);	
 	   
 	    }
-	  
 	  /**Metodo che restituisce il background con il meteo
 	   * @return il background con il meteo
-		 */
+	 */	  
 		public Image getImage() {
 			
 			return bkg;//bkg.getScaledInstance(-1, -1,Image.SCALE_SMOOTH);		

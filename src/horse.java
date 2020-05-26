@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
+
 /**
  * descrizione
  * @author Patrissi Mathilde
@@ -35,9 +36,9 @@ public class horse extends Thread{
 	   
 	}
 	private void initDefaultSpeed(){
-		speedhorse.add(4);
-		speedhorse.add(5);
-		speedhorse.add(8);
+		speedhorse.add(14);
+		speedhorse.add(15);
+		speedhorse.add(18);
 		speedhorse.add(10);
 		speedhorse.add(12);
 		speedhorse.add(14);

@@ -3,10 +3,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+
 /**
  * descrizione
  * @author Patrissi Mathilde
  */
+
 public class MessagesBundle {
     private String language="it";
     private String country="IT";

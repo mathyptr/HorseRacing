@@ -51,10 +51,9 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-/**
- * descrizione
- * @author Patrissi Mathilde
- */
+
+
+
 public class race extends JPanel  implements ActionListener{
 
     private final int B_WIDTH = 600;
@@ -67,7 +66,7 @@ public class race extends JPanel  implements ActionListener{
     private int width =50;
     private int height =50;
     private int corsia =60;
-    private int nmaxkorse=10;
+    private int nmaxhorse=10;
 	private java.util.Vector <horse> h =new java.util.Vector(1,1);
 	private java.util.Vector <Integer> speedhorse =new java.util.Vector(1,1);
 	private java.util.Vector <Integer> winner =new java.util.Vector(1,1);
@@ -78,6 +77,8 @@ public class race extends JPanel  implements ActionListener{
     private int numhorse=0;
     private int indeximage=0;
     private boolean start=false;
+    private boolean firstrace=true;
+    private boolean prizegiving=false;
     private Timer timer;
     private int x, y;
     private String atmo="atmo_snow";
@@ -116,17 +117,16 @@ public class race extends JPanel  implements ActionListener{
         language="it";
         country="IT";
         currentLocale = new Locale(language, country);
-//        messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
         msgB.SetLanguage("it", "IT");
         loadNumberimg();
         Menu();
         step=new movement();
-   	  	end=B_WIDTH-width;
-  
-   //     startRace();
+//   	  	end=B_WIDTH-width;
+
     }
 
     private void startRace() {
+    	end=B_WIDTH-width;
   		start=true;
         weat = new weather(B_WIDTH,B_HEIGHT,width,height,atmo);
   		 
@@ -442,27 +442,32 @@ public class race extends JPanel  implements ActionListener{
        	}
        	else if(pulsante.contentEquals(MessagesBundle.GetResourceValue("btn_start")))
     	{  	
-    		loadBKGimg();
-    	    numhorse=Integer.valueOf(numhorseField.getText());
-    	   
-    	    SetAtmo();
-  	    
+    		loadBKGimg();    		
+    		try {
+    	    	  numhorse=Integer.parseInt(numhorseField.getText());
+    	    	    
+			} catch (NumberFormatException exception) {
+        	    JOptionPane.showMessageDialog(this,MessagesBundle.GetResourceValue("error_on_num_horse"),MessagesBundle.GetResourceValue("err_msg"),JOptionPane.WARNING_MESSAGE);
+        	    return ;
+			}
+    		numhorse=Integer.valueOf(numhorseField.getText());	    	  
+    	    SetAtmo();  	    
        	    if(numhorse<2)
-        	    JOptionPane.showMessageDialog(this,MessagesBundle.GetResourceValue("warn_nmin_horse"),"warn_msg",JOptionPane.WARNING_MESSAGE);  
-       	    else if(numhorse>10)
-       	    	JOptionPane.showMessageDialog(this,MessagesBundle.GetResourceValue("warn_nmax_horse"),"warn_msg",JOptionPane.WARNING_MESSAGE);	
+        	    JOptionPane.showMessageDialog(this,MessagesBundle.GetResourceValue("warn_nmin_horse"),MessagesBundle.GetResourceValue("warn_msg"),JOptionPane.WARNING_MESSAGE);  
+       	    else if(numhorse>nmaxhorse)
+       	    	JOptionPane.showMessageDialog(this,MessagesBundle.GetResourceValue("warn_nmax_horse"),MessagesBundle.GetResourceValue("warn_msg"),JOptionPane.WARNING_MESSAGE);	
     	    else
     		{	    	
-
-//    	    	panHorse.setVisible(false);    	    	
-//    	    	panHorseImg.setVisible(false);
-    	    	
-    	    	panelMenuSetStatus(false);    	    	
-    	    	
+    	    	panelMenuSetStatus(false);    	    	   	    	
     			startRace();
-    	//	System.exit(0);
-    		}	
+    		}	       	    
     	}		
+       	else if(pulsante.contentEquals(MessagesBundle.GetResourceValue("btn_restart")))
+    	{  	
+       		prizegiving=false;
+       		panelMenuSetStatus(true);       	    
+    	}		
+
     }  
     
     private void panelMenuSetStatus(boolean status)
@@ -471,7 +476,12 @@ public class race extends JPanel  implements ActionListener{
     	boxCenter.setVisible(status);
     	boxBottom.setVisible(status);
 	}
-    
+    private void panelMenu1SetStatus(boolean status)
+    {
+  //  	btnStart.setText(msgB.GetResourceValue("btn_restart"));
+  //  	btnStart.setVisible(status);
+    	boxBottom.setVisible(status);
+	}   
     private void chgLanguage()
     {
     	if(languageCombo.getSelectedItem().toString().equals("IT"))
@@ -512,7 +522,10 @@ public class race extends JPanel  implements ActionListener{
   
 //        panHorse.add(percorsoLabel);       
 //        panHorse.add(bkgCombo)
-    	btnStart.setText(msgB.GetResourceValue("btn_start"));
+        if(firstrace)
+        	btnStart.setText(msgB.GetResourceValue("btn_start"));
+        else
+        	btnStart.setText(msgB.GetResourceValue("btn_restart"));
     	numehorseLabel.setText(msgB.GetResourceValue("label_numehorse"));
     	atmoLabel.setText(msgB.GetResourceValue("label_atmo"));
     	percorsoLabel.setText(msgB.GetResourceValue("label_place"));
@@ -605,6 +618,13 @@ public class race extends JPanel  implements ActionListener{
         	drawWater(g);
         	drawNumber(g);
         }
+        else if(prizegiving)
+        {
+        	drawBackground(g);
+  //      	drawCorsie(g);
+        	drawHorse(g);
+
+        }
     }
     
     private void drawNumber(Graphics g) {
@@ -614,19 +634,14 @@ public class race extends JPanel  implements ActionListener{
 	      		horsenum=winner.get(i);
 	    	    g.drawImage(imgNum.get(i), end-50, h.get(horsenum).getPosY()-height/3, this);
 	      	}
-
-			
-//	        g.drawImage((BufferedImage) ImageIO.read(getClass().getResourceAsStream("/img/num/1.png")), 560, 240, this);
-
-
-//        g.drawImage(imagebkg, 100, 100, this);
-
 	}
     private void drawBackground(Graphics g) {
         g.drawImage(imagebkg, 0, 0, this);
-        for (int i=0;i<numhorse;i++) {
-    		g.drawImage(imagefinish,end, i*corsia,this);   	 
-    	}   
+        
+/*        for (int i=0;i<nmaxhorse;i++) {
+     		g.drawImage(imagefinish,end, i*corsia,this);   	 
+     	} */        
+        
 	}  
     
     private void drawHorse(Graphics g) {
@@ -634,24 +649,31 @@ public class race extends JPanel  implements ActionListener{
     	BufferedImage hh1 = null,hh2=null;
     	Graphics2D ig;
     	for (int i=0;i<numhorse;i++) {  
-    		hh=h.get(i).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);
-  //  		hh=h.get(i).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);
-  		 //  		hh2=((ToolkitImage)hh).getBufferedImage();
-/*		ig=h.get(i).getImage().createGraphics();
-   		Color from = Color.white;
-		Color to = Color.green;
-		ig.setColor(to);
-		ig.fillRect(0, 0,width,height);	
-		*/
-// 		hh=hh1.getScaledInstance(width, height,Image.SCALE_SMOOTH);
- //		ig.drawImage((BufferedImage) hh, null, 0, 0);
- 	    			
-   
+    		hh=h.get(i).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);	    			
             g.drawImage(hh, h.get(i).getPosX(), h.get(i).getPosY(), this);
     	 }
         Toolkit.getDefaultToolkit().sync();
     }
+    
+    private void drawPrizeGiving(Graphics g){
+ 		int horsenum;
+ 		Image hh;
 
+ 		horsenum=winner.get(0);
+	    g.drawImage(imgNum.get(0), end/2, INITIAL_Y/2-height, this);
+		hh=h.get(horsenum).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);
+
+  		horsenum=winner.get(1);  		
+	    g.drawImage(imgNum.get(1), end/2, INITIAL_Y/2-height/2, this);
+		hh=h.get(horsenum).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);
+
+	    horsenum=winner.get(2);
+	    g.drawImage(imgNum.get(2), end/2, INITIAL_Y/2+height, this);
+		hh=h.get(horsenum).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);
+
+}
+
+    
     private void drawCorsie(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
 
@@ -665,10 +687,13 @@ public class race extends JPanel  implements ActionListener{
             2f);
         g2d.setStroke(bs1);   	
     	
-    	
-    	for (int i=1;i<=numhorse;i++) {
-    		g.drawLine(0,i*corsia, end,i*corsia);   	 
+        int i;
+    	for (i=0;i<nmaxhorse;i++) {
+    		g.drawLine(0,i*corsia, end,i*corsia);   
+        	g.drawImage(imagefinish,end, i*corsia,this);   	   
     	}
+		g.drawLine(0,i*corsia, end,i*corsia);   
+	    	  
 	}
     
     private void drawWater(Graphics g)  {
@@ -690,19 +715,35 @@ public class race extends JPanel  implements ActionListener{
     	      	}    
     	      	if(winner.size()==numhorse)
     	      	{
+    	      		firstrace=false;
     	      		start=false;
-    	      		panelMenuSetStatus(true);
-//        	    	panHorse.setVisible(true);    	    	
+    	      		prizegiving=true;
+    	      		end=end/2;
+    	      		numhorse=3;
+    	      		initHorses();
     	      	} 
     	    }
     
-    private void moveHorse() {
+    
+    private void checkEndPrizeGiving() {
 
- /*   	int i;
-      	for ( i=0;i<numhorse;i++) 
-      		h.get(i).move();
-   */   
-    	checkWin();
+    	int i;
+      	if(h.get(0).getPosX()>=end && h.get(1).getPosX()>=end&&h.get(2).getPosX()>=end)
+      	{
+   //   		firstrace=false;
+  //    		start=false;
+   //   		prizegiving=false;
+      		panelMenu1SetStatus(true);  	    	
+      	}     
+    }
+    	
+    private void moveHorse() {    	
+
+    	 if(start)
+    		 checkWin();
+    	 else if(prizegiving)
+    		 checkEndPrizeGiving();
+    	
     	step.put(indeximage);
       	indeximage++;
         Toolkit.getDefaultToolkit().sync();

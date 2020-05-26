@@ -8,14 +8,15 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JFrame;
+
 /**
  * descrizione
  * @author Patrissi Mathilde
  */
-public class HorseRacing extends JFrame {
 
+public class HorseRacing extends JFrame {
 	/**Costruttore della classe HorseRacing
-    */
+	    */
     public HorseRacing() {
    	
     	
