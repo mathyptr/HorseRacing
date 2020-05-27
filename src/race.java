@@ -1,3 +1,5 @@
+
+
 import java.applet.AudioClip;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -63,22 +65,27 @@ public class race extends JPanel  implements ActionListener{
     private final int INITIAL_DELAY = 100;
     private final int PERIOD_INTERVAL = 50;
     private int end;
+    private int priceposition;
     private int width =50;
     private int height =50;
     private int corsia =60;
     private int nmaxhorse=10;
 	private java.util.Vector <horse> h =new java.util.Vector(1,1);
+	private java.util.Vector <horse> horsewinner =new java.util.Vector(1,1);
+
 	private java.util.Vector <Integer> speedhorse =new java.util.Vector(1,1);
 	private java.util.Vector <Integer> winner =new java.util.Vector(1,1);
 	private java.util.Vector <BufferedImage> imgNum =new java.util.Vector(1,1);
+	private java.util.Vector <BufferedImage> imgCup =new java.util.Vector(1,1);
 	
 	private movement step;	
 	private weather weat;
     private int numhorse=0;
+    private int numhorseWinner=3;
     private int indeximage=0;
     private boolean start=false;
     private boolean firstrace=true;
-    private boolean prizegiving=false;
+    private boolean pricegiving=false;
     private Timer timer;
     private int x, y;
     private String atmo="atmo_snow";
@@ -119,15 +126,16 @@ public class race extends JPanel  implements ActionListener{
         currentLocale = new Locale(language, country);
         msgB.SetLanguage("it", "IT");
         loadNumberimg();
+        loadCup();
         Menu();
         step=new movement();
 //   	  	end=B_WIDTH-width;
-
+        priceposition=B_WIDTH/2;
     }
 
     private void startRace() {
     	end=B_WIDTH-width;
-  		start=true;
+  	
         weat = new weather(B_WIDTH,B_HEIGHT,width,height,atmo);
   		 
         if(winner.size()!=0)
@@ -141,8 +149,8 @@ public class race extends JPanel  implements ActionListener{
   	         AudioInputStream audioIn = AudioSystem.getAudioInputStream(new BufferedInputStream(getClass().getResourceAsStream("/music/galoppata.wav")));
   	         Clip clip = AudioSystem.getClip();
   	         clip.open(audioIn);
-  	         //clip.start();
-//  	         clip.loop(10);
+  	 //        clip.start();
+  	         clip.loop(12);
    		}
   	    catch (Exception e){
   		   System.out.println("errore on sound: "+e.toString());
@@ -151,7 +159,7 @@ public class race extends JPanel  implements ActionListener{
        
          x = INITIAL_X;
          y = INITIAL_Y;
-         
+     	 start=true;      
          timer = new Timer();
          timer.scheduleAtFixedRate(new ScheduleTask(),INITIAL_DELAY, PERIOD_INTERVAL);
     }
@@ -313,122 +321,21 @@ public class race extends JPanel  implements ActionListener{
     
         languageCombo.addActionListener(this);
         btnStart.addActionListener(this);
-    }
-
-    private void MenuOLD() {
-    	btnStart = new JButton("Partenza");
-    	numehorseLabel = new JLabel("Numero di cavalli",JLabel.RIGHT);
-    	atmoLabel = new JLabel("Condizioni atmosferiche",JLabel.RIGHT);
-    	percorsoLabel = new JLabel("Percorso",JLabel.RIGHT);
-    	languageLabel = new JLabel("Linguaggio",JLabel.RIGHT);
-
-    	btnStart.setText(msgB.GetResourceValue("btn_start"));
-    	numehorseLabel.setText(msgB.GetResourceValue("label_numehorse"));
-    	atmoLabel.setText(msgB.GetResourceValue("label_atmo"));
-    	percorsoLabel.setText(msgB.GetResourceValue("label_place"));
-    	languageLabel.setText(msgB.GetResourceValue("label_language"));
- 
-
-   // 	  Color co= new Color(170,218,24);
-    //   setBackground(co);    	
- //      panHorse.setLayout(null);
-       setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-//       numhorseField.setBounds(50,50,10,10);
-//       btnCambia.setBounds(100,100,10,10);
- //      setLayout(new GridLayout(2,2,10,10));
-       setLayout(new BorderLayout());
-    
-       //       panHorse.setPreferredSize(new Dimension(B_WIDTH/2, B_HEIGHT/4));
-       panHorse.setLayout(new GridLayout(3,4,10,10));
-//       panHorse.setLayout(new GridLayout(5,1));
-/*
-       atmoCombo.addItem("sole");
-       atmoCombo.addItem("pioggia");
-       atmoCombo.addItem("tempesta");
-       atmoCombo.addItem("neve");
-  */  
-                     
-      
-       atmoCombo.addItem(msgB.GetResourceValue("atmo_sun"));
-       atmoCombo.addItem(msgB.GetResourceValue("atmo_rain"));
-       atmoCombo.addItem(msgB.GetResourceValue("atmo_stormwind"));
-       atmoCombo.addItem(msgB.GetResourceValue("atmo_snow"));
- 
-       
-       
-       panHorse.add(atmoLabel);       
-       panHorse.add(atmoCombo);
-       
-
-/*       bkgCombo.addItem("sabbia");
-       bkgCombo.addItem("terra");
-       bkgCombo.addItem("erba");
-       bkgCombo.addItem("roccia");
-       bkgCombo.addItem("ghiaccio");
-       bkgCombo.addItem("asfalto");
-   */    
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_sand"));
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_field"));
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_green"));
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_rock")); 
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_ice"));
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_railroad")); 
-       
-       
-       panHorse.add(percorsoLabel);       
-       panHorse.add(bkgCombo);
-       
-       
-       languageCombo.addItem("IT");
-       languageCombo.addItem("EN");
-       panHorse.add(languageLabel);
-       panHorse.add(languageCombo);
-       
-       panHorse.add(numehorseLabel);
-       panHorse.add(numhorseField);
-       
-       panHorse.add(new JLabel(""));                
-       panHorse.add(btnStart);     
-     
-        panHorse.setVisible(true);
-        this.add(panHorse,"North");
         
-        panHorseImg.setLayout(new GridLayout(5,2,10,10));
-        Graphics g=this.getGraphics();
-       	
-        Image hh;
-    	java.util.Vector <horse> horseshow =new java.util.Vector(1,1);
-       	for (int i=0;i<numhorse;i++) {
-      		horseshow.addElement(new horse(i+1,end,step));
-        		hh=horseshow.get(i).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);      
-        	    panHorseImg.add(new JLabel(new ImageIcon(hh)));
-        	    		            
-      	}    
-       	panHorseImg.setVisible(true);
-        this.add(panHorseImg,"Center");
-//        this.add(btnStart,"South");     
-             
-    	/*
-    	for (int i=0;i<numhorse/2;i++) {
-      		horseshow.addElement(new horse(i+1,end,step));
-      		horseshow.get(i).setPosX(INITIAL_X);
-      		horseshow.get(i).setPosY(INITIAL_Y+(i+B_HEIGHT/2)*corsia);
-       		hh=horseshow.get(i).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);      
-            g.drawImage(hh, horseshow.get(i).getPosX(), horseshow.get(i).getPosY(), this);
-            
-      	}    
-     	for (int i=numhorse/2;i<numhorse;i++) {
-      		horseshow.addElement(new horse(i+1,end,step));
-      		horseshow.get(i).setPosX(INITIAL_X+B_WIDTH/2);
-      		horseshow.get(i).setPosY(INITIAL_Y+(i+B_HEIGHT/2)*corsia);
-      		hh=horseshow.get(i).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);           		 
-            g.drawImage(hh, horseshow.get(i).getPosX(), horseshow.get(i).getPosY(), this);
-                 	}     
-    
-    */
-        languageCombo.addActionListener(this);
-        btnStart.addActionListener(this);
-    }
+        try {     
+    		  //  		    InputStream is=getClass().getResourceAsStream("/music/horse.wav");
+    		  	         AudioInputStream audioIn = AudioSystem.getAudioInputStream(new BufferedInputStream(getClass().getResourceAsStream("/music/Menu.wav")));
+    		  	         Clip clip = AudioSystem.getClip();
+    		  	         clip.open(audioIn);
+    		  	 //        clip.start();
+    		  	         clip.loop(1);
+    		   		}
+    		  	    catch (Exception e){
+    		  		   System.out.println("errore on sound: "+e.toString());
+    		  	    }
+    	} 
+
+
   
     
     public void actionPerformed(ActionEvent e)
@@ -464,7 +371,8 @@ public class race extends JPanel  implements ActionListener{
     	}		
        	else if(pulsante.contentEquals(MessagesBundle.GetResourceValue("btn_restart")))
     	{  	
-       		prizegiving=false;
+       		pricegiving=false;
+       		firstrace=true;
        		panelMenuSetStatus(true);       	    
     	}		
 
@@ -472,13 +380,14 @@ public class race extends JPanel  implements ActionListener{
     
     private void panelMenuSetStatus(boolean status)
     {
+     	btnStart.setText(msgB.GetResourceValue("btn_start"));
     	boxUpper.setVisible(status);
     	boxCenter.setVisible(status);
     	boxBottom.setVisible(status);
 	}
     private void panelMenu1SetStatus(boolean status)
     {
-  //  	btnStart.setText(msgB.GetResourceValue("btn_restart"));
+   	btnStart.setText(msgB.GetResourceValue("btn_restart"));
   //  	btnStart.setVisible(status);
     	boxBottom.setVisible(status);
 	}   
@@ -562,6 +471,21 @@ public class race extends JPanel  implements ActionListener{
 	}
    	}
     
+    private void loadCup()
+   	{   
+    	try {
+		
+        	imgCup.addElement( ImageIO.read(getClass().getResourceAsStream("/img/cup/coppaOro.png")));
+           	imgCup.addElement( ImageIO.read(getClass().getResourceAsStream("/img/cup/coppaArgento.png")));
+           	imgCup.addElement( ImageIO.read(getClass().getResourceAsStream("/img/cup/coppaBronzo.png")));
+  
+		} catch (IOException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+   	}
+    
+    
     private void SetAtmo()
     {
     	atmo=MessagesBundle.GetResourceKey(atmoCombo.getSelectedItem().toString());
@@ -606,11 +530,24 @@ public class race extends JPanel  implements ActionListener{
     		h.get(i).start();
     	}
 	}
+    private void initHorsesWinner(){
+    	if(horsewinner.size()!=0)
+    		horsewinner.clear();
+    	for (int i=0;i<numhorseWinner;i++) {
+    		horsewinner.addElement(new horse(winner.get(i)+1,end,step));
+    		horsewinner.get(i).setPosX(INITIAL_X);
+    		horsewinner.get(i).setPosY(INITIAL_Y+(i+3)*corsia);
+    		horsewinner.get(i).start();
+    	}
+	} 
 
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+ /*       if(!firstrace)
+        	drawBackground(g);
+        	*/
         if(start) {
         	drawBackground(g);
         	drawCorsie(g);
@@ -618,11 +555,10 @@ public class race extends JPanel  implements ActionListener{
         	drawWater(g);
         	drawNumber(g);
         }
-        else if(prizegiving)
+        else if(pricegiving)
         {
         	drawBackground(g);
-  //      	drawCorsie(g);
-        	drawHorse(g);
+          	drawHorseWinner(g);
 
         }
     }
@@ -651,6 +587,22 @@ public class race extends JPanel  implements ActionListener{
     	for (int i=0;i<numhorse;i++) {  
     		hh=h.get(i).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);	    			
             g.drawImage(hh, h.get(i).getPosX(), h.get(i).getPosY(), this);
+    	 }
+        Toolkit.getDefaultToolkit().sync();
+    }
+
+    private void drawHorseWinner(Graphics g) {
+    	Image hh;
+    	BufferedImage hh1 = null,hh2=null;
+    	Graphics2D ig;
+    	for (int i=0;i<numhorseWinner;i++) {  
+    		hh=horsewinner.get(i).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);	    			
+            g.drawImage(hh, horsewinner.get(i).getPosX(), horsewinner.get(i).getPosY(), this);
+            g.drawImage(imgCup.get(i), priceposition+50, horsewinner.get(i).getPosY(), this);
+            g.setFont(g.getFont().deriveFont(20f));
+            g.setColor(Color.WHITE);
+            g.drawString(horsewinner.get(i).getHorseName(),  priceposition+100, horsewinner.get(i).getPosY()+30);
+
     	 }
         Toolkit.getDefaultToolkit().sync();
     }
@@ -715,25 +667,55 @@ public class race extends JPanel  implements ActionListener{
     	      	}    
     	      	if(winner.size()==numhorse)
     	      	{
+    	      	
     	      		firstrace=false;
     	      		start=false;
-    	      		prizegiving=true;
-    	      		end=end/2;
-    	      		numhorse=3;
-    	      		initHorses();
+    	      	
+    	      		end=priceposition;
+    	      		if(numhorse>2)
+    	      			numhorseWinner=3;
+    	      		else
+    	      			numhorseWinner=2;
+    	      		initHorsesWinner();
+    	      		pricegiving=true;
+    	      		panelMenu1SetStatus(true);
+    	      		try {     
+    	      		  //  		    InputStream is=getClass().getResourceAsStream("/music/horse.wav");
+    	      		  	         AudioInputStream audioIn = AudioSystem.getAudioInputStream(new BufferedInputStream(getClass().getResourceAsStream("/music/applausi.wav")));
+    	      		  	         Clip clip = AudioSystem.getClip();
+    	      		  	         clip.open(audioIn);
+    	      		  	 //        clip.start();
+    	      		  	         clip.loop(1);
+    	      		   		}
+    	      		  	    catch (Exception e){
+    	      		  		   System.out.println("errore on sound: "+e.toString());
+    	      		  	    }
     	      	} 
     	    }
     
     
     private void checkEndPrizeGiving() {
 
-    	int i;
-      	if(h.get(0).getPosX()>=end && h.get(1).getPosX()>=end&&h.get(2).getPosX()>=end)
+    	int i,allprice;
+    	allprice=0;
+      	for ( i=0;i<numhorseWinner;i++) 
       	{
+      		if(horsewinner.get(i).getPosX()>=end
+      				)
+      		{
+      			horsewinner.get(i).SetFinalPosition(i+1);
+      			allprice++;
+      		}
+      	}
+    	
+    	        	
+      	if(allprice==numhorseWinner){
    //   		firstrace=false;
   //    		start=false;
-   //   		prizegiving=false;
-      		panelMenu1SetStatus(true);  	    	
+ //     		pricegiving=false;
+ 
+      			;    		
+//      		panelMenu1SetStatus(true);  	    	
       	}     
     }
     	
@@ -741,7 +723,7 @@ public class race extends JPanel  implements ActionListener{
 
     	 if(start)
     		 checkWin();
-    	 else if(prizegiving)
+    	 else if(pricegiving)
     		 checkEndPrizeGiving();
     	
     	step.put(indeximage);

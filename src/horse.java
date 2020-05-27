@@ -129,6 +129,6 @@ public class horse extends Thread{
 //			 System.out.println("-Consumatore #"+this.number+"get:"+valore);
 //			System.out.println(Thread.currentThread().getName()+" giro "+i);
 		}	
-		System.out.println(Thread.currentThread().getName()+" ARRIVATO");
+//		System.out.println(Thread.currentThread().getName()+" ARRIVATO");
 	}
 }

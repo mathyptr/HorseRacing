@@ -1,3 +1,5 @@
+
+
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
@@ -17,7 +19,7 @@ public class MessagesBundle {
     
     public void MessagesBundle() {
 //        currentLocale = new Locale(language, country);
-//        messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+//        messages = ResourceBundle.getBundle("resources.language.MessagesBundle", currentLocale);
         }
     /**Metodo per il settaggio della lingua
      * @param language String
@@ -27,7 +29,7 @@ public class MessagesBundle {
     this.language=language;
     this.country=country;
     currentLocale = new Locale(language, country);
-    messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+    messages = ResourceBundle.getBundle("language.MessagesBundle", currentLocale);
    
    /* mapResource = new HashMap<>();
     Enumeration<String> keys = messages.getKeys();
