@@ -1,3 +1,4 @@
+package HorseRacing;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -59,12 +60,6 @@ public class horse extends Thread{
 		    imgb.addElement( ImageIO.read(getClass().getResourceAsStream("/img/horse"+num+"/horse3.png")));
 		    imgb.addElement( ImageIO.read(getClass().getResourceAsStream("/img/horse"+num+"/horse4.png")));
 			
-	/*   imgb.addElement( ImageIO.read(new File("resources/horse"+num+"/horse.png")));    
-	     imgb.addElement( ImageIO.read(new File("resources/horse"+num+"/horse1.png")));
-	     imgb.addElement( ImageIO.read(new File("resources/horse"+num+"/horse2.png")));
-	     imgb.addElement( ImageIO.read(new File("resources/horse"+num+"/horse3.png")));
-	     imgb.addElement( ImageIO.read(new File("resources/horse"+num+"/horse4.png")));
-*/
 			}
 	     catch (Exception e){
 			   System.out.println("errore input");
@@ -85,9 +80,6 @@ public class horse extends Thread{
 		if(posx<end)
 			indeximg=(indeximg+1)%imgb.size();
 		return imgb.get(indeximg);		
-			
-	//		indeximg=indeximg%imgb.size()+1;
-	//		return imgb.get(indeximg-1);		
 	}	
 	
 	public void setPosX(Integer posx) {
@@ -117,18 +109,14 @@ public class horse extends Thread{
 				posx=n;
 	}	
 	public void run() {
-		int valore;
 		while(posx<end) {
-			 valore = step.get();
+			step.get();
 			 move();
 			 try {
 				sleep(500);
 			} catch (InterruptedException e) {
 				
 			}
-//			 System.out.println("-Consumatore #"+this.number+"get:"+valore);
-//			System.out.println(Thread.currentThread().getName()+" giro "+i);
 		}	
-//		System.out.println(Thread.currentThread().getName()+" ARRIVATO");
 	}
 }

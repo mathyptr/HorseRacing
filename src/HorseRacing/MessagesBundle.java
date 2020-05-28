@@ -1,4 +1,4 @@
-
+package HorseRacing;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -18,8 +18,6 @@ public class MessagesBundle {
     private static  ResourceBundle messages;
     
     public void MessagesBundle() {
-//        currentLocale = new Locale(language, country);
-//        messages = ResourceBundle.getBundle("resources.language.MessagesBundle", currentLocale);
         }
     /**Metodo per il settaggio della lingua
      * @param language String
@@ -30,14 +28,6 @@ public class MessagesBundle {
     this.country=country;
     currentLocale = new Locale(language, country);
     messages = ResourceBundle.getBundle("language.MessagesBundle", currentLocale);
-   
-   /* mapResource = new HashMap<>();
-    Enumeration<String> keys = messages.getKeys();
-    while (keys.hasMoreElements()) {
-        String key = keys.nextElement();
-        mapResource.put(key, messages.getString(key));
-    }
-*/
     
     }
     public static String GetResourceKey(String value) {

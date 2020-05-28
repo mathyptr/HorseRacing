@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"HorseRacing","l":"horse"},{"p":"HorseRacing","l":"HorseRacing"},{"p":"HorseRacing","l":"JUnitHorse"},{"p":"HorseRacing","l":"MessagesBundle"},{"p":"HorseRacing","l":"movement"},{"p":"HorseRacing","l":"race"},{"p":"HorseRacing","l":"weather"}]

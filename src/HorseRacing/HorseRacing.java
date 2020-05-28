@@ -1,4 +1,4 @@
-
+package HorseRacing;
 
 import java.applet.AudioClip;
 import java.awt.EventQueue;

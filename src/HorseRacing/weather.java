@@ -1,4 +1,4 @@
-
+package HorseRacing;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -50,7 +50,7 @@ public class weather {
 	  
 	    		if(fileAtmo!=null)
 	    			imgBase=ImageIO.read(getClass().getResourceAsStream(fileAtmo)).getScaledInstance(tilewidth/5, tileheight/5,Image.SCALE_SMOOTH);
-//		   		rain=ImageIO.read(getClass().getResourceAsStream("/img/atmo/snow.png")).getScaledInstance(tilewidth/5, tileheight/5,Image.SCALE_SMOOTH);
+
 		   		if(type.equals("atmo_stormwind"))
 		   			thunder= ImageIO.read(getClass().getResourceAsStream("/img/atmo/lampo.png")).getScaledInstance(tilewidth/2, tileheight/2,Image.SCALE_SMOOTH);
 				bkg =(BufferedImage) ImageIO.read(getClass().getResourceAsStream("/img/atmo/trasparente.png"));//.getScaledInstance(width/2, height/2,Image.SCALE_SMOOTH);
@@ -62,8 +62,7 @@ public class weather {
    
 	    }
 
-/** Metodo per la realizzazione del background con il meteo
- * @exception eccezione di I/O
+/** Metodo per la realizzazione del layer meteo
      */ 
 	  public void buildWeather()  {
 	    	int px,py;
@@ -78,7 +77,6 @@ public class weather {
    		    Graphics2D gg = bkg.createGraphics();			  
    			if(imgBase!=null) {
 				
-//		   		Image im=ImageIO.read(getClass().getResourceAsStream("/img/atmo/acqua.png")).getScaledInstance(width/5, height/5,Image.SCALE_SMOOTH);
 		  		for(i=0;i<width;i+=30)
 	    			for(j=0;j<height;j+=30)
 	    			{
@@ -88,24 +86,21 @@ public class weather {
 	    			}
 					py=(int)(Math.random()*height);    		
    			}
-//	   		Image imL;
-//				imL = ImageIO.read(getClass().getResourceAsStream("/img/atmo/lampo.png")).getScaledInstance(width/2, height/2,Image.SCALE_SMOOTH);
-//				BufferedImage image=(BufferedImage) ImageIO.read(getClass().getResourceAsStream("/img/atmo/trasparente.png"));//.getScaledInstance(width/2, height/2,Image.SCALE_SMOOTH);
 			if(thunder!=null) {
 				for(i=0;i<width;i+=50) {    		
 					py=(int)(Math.random()*height);
 					gg.drawImage(thunder, i,py, null);	
 				}
 			}
-//				g.drawImage(image, 0,0, this);	
+	
 	   
 	    }
-	  /**Metodo che restituisce il background con il meteo
-	   * @return il background con il meteo
+	  /**Metodo che restituisce il layer meteo
+	   * @return il layer meteo
 	 */	  
 		public Image getImage() {
 			
-			return bkg;//bkg.getScaledInstance(-1, -1,Image.SCALE_SMOOTH);		
+			return bkg;		
 		}	
 	 
 }
