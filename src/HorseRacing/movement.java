@@ -1,6 +1,6 @@
 package HorseRacing;
 /**
- * descrizione
+ * Classe che implementa e gestisce la produzione e il rilascio di una risorsa. Permette la comunicazione fra il processo che realizza un movimento e i thread che concorrono per utilizzarlo
  * @author Patrissi Mathilde
  */
 public class movement {

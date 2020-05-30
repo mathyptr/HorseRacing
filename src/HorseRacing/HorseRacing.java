@@ -12,7 +12,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.JFrame;
 
 /**
- * descrizione
+ * Classe contenente il main e che gestisce l'istanza della classe Race
  * @author Patrissi Mathilde
  */
 

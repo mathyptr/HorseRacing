@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 
 import javax.imageio.ImageIO;
 /**
- * descrizione
+ * Classe che implementa le condizioni atmosferiche
  * @author Patrissi Mathilde
  *
  */

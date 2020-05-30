@@ -6,7 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+/**
+ * Classe contenente i test
+ * @author Patrissi Mathilde
+ */
 class JUnitHorse {
 	MessagesBundle msgB= new MessagesBundle();
 	

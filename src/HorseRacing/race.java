@@ -55,7 +55,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 /**
- * descrizione
+ * Classe che gestisce la gara di cavalli visualizzando background, corsie, cavalli, musica e condizioni atmosferiche
  * @author Patrissi Mathilde
  */
 
@@ -101,13 +101,8 @@ public class race extends JPanel  implements ActionListener{
     Clip clipMenu;
     Clip clipRace;
     Clip clipWin; 
-    
-// 	JPopupMenu popup = new JPopupMenu();
-//	JMenuBar menuBar = new JMenuBar();
-//	ImageIcon exitIcon = new ImageIcon("src/resources/exit.png");
 	BufferedImage imagebkg=null;
 	BufferedImage imagefinish=null;
-//	JMenu fileMenu = new JMenu("Opzioni");
 	
 	private JPanel panHorse= new JPanel();
 	private JPanel panHorseOpt= new JPanel();
@@ -135,19 +130,16 @@ public class race extends JPanel  implements ActionListener{
 
 	
 	private JButton btnStart =null;
-	
+	/**
+	 * Costruttore della classe race
+	 */
     public race() {
      	numhorse=10;	  	        
         
-  //      String language,country;
- //       language="it";
- //       country="IT";
-//        currentLocale = new Locale(language, country);
-        msgB.SetLanguage("it", "IT");
+         msgB.SetLanguage("it", "IT");
         loadNumberimg();
         loadCup();
         step=new movement();
-//   	  	end=B_WIDTH-width;
         priceposition=B_WIDTH/2;
     	try {     
  	         AudioInputStream audioIn = AudioSystem.getAudioInputStream(new BufferedInputStream(getClass().getResourceAsStream("/music/Menu.wav")));
@@ -168,7 +160,9 @@ public class race extends JPanel  implements ActionListener{
         Menu();
 
     }
-
+    /**
+	 * Metodo che permette l'inizio della gara inizializzando i thread che gestiscono i cavalli, il meteo e la musica
+	 */
     private void startRace() {
     	end=B_WIDTH-width;
   	
@@ -176,8 +170,7 @@ public class race extends JPanel  implements ActionListener{
   		 
         if(winner.size()!=0)
         	winner.clear();
-  //       setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-
+  
          initHorses();
       	 ClipSound(clipMenu,false);
       	 ClipSound(clipWin,false);
@@ -190,22 +183,37 @@ public class race extends JPanel  implements ActionListener{
          timer.scheduleAtFixedRate(new ScheduleTask(),INITIAL_DELAY, PERIOD_INTERVAL);
     }
     
+    /**
+	 * Metodo per l'implementazione dell'interfaccia menu' iniziale
+	 */
     
-    private void Menu() {
+private void Menu() {
+    	
+   
+    	
     	btnStart = new JButton();
     	Border edge=BorderFactory.createRaisedBevelBorder();
     	Dimension size = new Dimension(100,60);
-    	btnStart.setBorder(edge);
-    	btnStart.setPreferredSize(size);
+   //3005   	btnStart.setBorder(edge);
+  //3005   	btnStart.setPreferredSize(size);
  soundCheckBox.setSelected (true);
-    /*	numehorseLabel = new JLabel("Numero di cavalli",JLabel.RIGHT);
-    	atmoLabel = new JLabel("Condizioni atmosferiche",JLabel.RIGHT);
-    	percorsoLabel = new JLabel("Percorso",JLabel.RIGHT);
-    	languageLabel = new JLabel("Linguaggio",JLabel.RIGHT);
-*/
-  
+ 
+ 
 
-    	
+ size = new Dimension(80,20);
+ atmoLabel.setPreferredSize(size);  //3005     
+ atmoCombo.setPreferredSize(size);  //3005
+ percorsoLabel.setPreferredSize(size);  //3005       
+ bkgCombo.setPreferredSize(size);  //3005          
+ languageLabel.setPreferredSize(size);  //3005
+ languageCombo.setPreferredSize(size);  //3005
+ numehorseLabel.setPreferredSize(size);  //3005;
+ numhorseField.setPreferredSize(size);  //3005  
+ soundCheckBox.setPreferredSize(size);  //3005
+
+ 
+ 
+ 
     /*	LayoutManager panHorseLayout = new BoxLayout(panHorse, BoxLayout.X_AXIS);
     	panHorse.setLayout(panHorseLayout);
     	LayoutManager panHorseOptLayout = new BoxLayout(panHorseOpt, BoxLayout.X_AXIS);       
@@ -294,20 +302,35 @@ public class race extends JPanel  implements ActionListener{
      	boxCenter.add(panHorseImgRight);
      	boxCenter.add(panHorseImgLeft);
      	
-   //  	panButtonStart.add(btnStart);
+   
+     	//panButtonStart.setLayout(new GridLayout(3,4,10,10));//3005
+      	panButtonStart.add(btnStart);//3005
+
      	boxBottom = Box.createHorizontalBox();
-  //   	panButtonStart.setLayout(new GridLayout(3,4,10,10));
-  //      boxBottom.add(panButtonStart);
-  //      boxBottom.setBounds(B_WIDTH, B_HEIGHT, 100, 50);
-//2805
- 
-       boxBottom.add(btnStart);     
+  //      boxBottom.add(Box.createHorizontalStrut(B_WIDTH/10)); //3005
+ //       boxBottom.add(Box.createVerticalStrut(10)); //3005
+     	boxBottom.add(Box.createHorizontalStrut(B_WIDTH/2-50)); //3005
+        boxBottom.add(panButtonStart);//3005
+       	boxBottom.add(Box.createHorizontalStrut(B_WIDTH/2-50)); //3005
+ //     boxBottom.setBounds(B_WIDTH, B_HEIGHT-100, 50, 50); //3005
+    
+   
+ //3005      boxBottom.add(btnStart);     
         BoxLayout box=new BoxLayout(this,BoxLayout.Y_AXIS);
         this.setLayout(box);
+
+        boxBottom.setOpaque( false );//3005
+        
         this.add(boxUpper);
+        this.add(boxBottom);
         this.add(Box.createVerticalStrut(100));
         this.add(boxCenter);
-        this.add(boxBottom);
+    // 3005   this.add(boxBottom);
+        this.add(Box.createVerticalStrut(500));//3005
+        
+        this.setOpaque( false );//3005
+  //      this.add(boxBottom,BorderLayout.SOUTH);//3005
+             
 //        this.add(boxUpper,BorderLayout.NORTH);
     	
  //       this.add(panHorse);
@@ -325,174 +348,27 @@ public class race extends JPanel  implements ActionListener{
         ClipSound(clipRace,false);
         ClipSound(clipWin,false);
         ClipSound(clipMenu,true);
-             
+      
+      	
    	} 
-
     
     
     
-    private void Menu1() {
-    	btnStart = new JButton(MessagesBundle.GetResourceValue("btn_start"));
-    	Border edge=BorderFactory.createRaisedBevelBorder();
-    	Dimension size = new Dimension(80,20);
-    	btnStart.setBorder(edge);
-    	btnStart.setPreferredSize(size);
-    	
-    /*	numehorseLabel = new JLabel("Numero di cavalli",JLabel.RIGHT);
-    	atmoLabel = new JLabel("Condizioni atmosferiche",JLabel.RIGHT);
-    	percorsoLabel = new JLabel("Percorso",JLabel.RIGHT);
-    	languageLabel = new JLabel("Linguaggio",JLabel.RIGHT);
-*/
-    	numehorseLabel = new JLabel("Numero di cavalli");
-    	atmoLabel = new JLabel("Condizioni atmosferiche");
-    	percorsoLabel = new JLabel("Percorso");
-    	languageLabel = new JLabel("Linguaggio");
-
-    	
-    /*	LayoutManager panHorseLayout = new BoxLayout(panHorse, BoxLayout.X_AXIS);
-    	panHorse.setLayout(panHorseLayout);
-    	LayoutManager panHorseOptLayout = new BoxLayout(panHorseOpt, BoxLayout.X_AXIS);       
-    	panHorseOpt.setLayout(panHorseOptLayout);
-    	LayoutManager panHorseImgLayout = new BoxLayout(panHorseImg, BoxLayout.X_AXIS);
-    	panHorseImg.setLayout(panHorseImgLayout);
-    	*/
-    	 
-
-       setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
     
-
-  //     panHorse.setLayout(new GridLayout(3,4,10,10));
-
-   	   btnStart.setText(msgB.GetResourceValue("btn_start"));
-   	   numehorseLabel.setText(msgB.GetResourceValue("label_numehorse"));
-   	   atmoLabel.setText(msgB.GetResourceValue("label_atmo"));
-       percorsoLabel.setText(msgB.GetResourceValue("label_place"));
-       languageLabel.setText(msgB.GetResourceValue("label_language"));
-       
-       atmoCombo.addItem(msgB.GetResourceValue("atmo_sun"));
-       atmoCombo.addItem(msgB.GetResourceValue("atmo_rain"));
-       atmoCombo.addItem(msgB.GetResourceValue("atmo_stormwind"));
-       atmoCombo.addItem(msgB.GetResourceValue("atmo_snow"));
-                   
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_sand"));
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_field"));
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_green"));
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_rock")); 
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_ice"));
-       bkgCombo.addItem(msgB.GetResourceValue("bkg_railroad")); 
-
-       languageCombo.addItem("IT");
-       languageCombo.addItem("EN");
-       
-       /*
-       panHorse.add(atmoLabel);       
-       panHorse.add(atmoCombo);
-       panHorse.add(percorsoLabel);       
-       panHorse.add(bkgCombo);             
-       panHorseOpt.add(languageLabel);
-       panHorseOpt.add(languageCombo);       
-       panHorseOpt.add(numehorseLabel);
-       panHorseOpt.add(numhorseField);       
-       panHorseOpt.add(new JLabel(""));                
-       panHorseOpt.add(btnStart);     
-     
-        panHorse.setVisible(true);
-        panHorseOpt.setVisible(true);
-        this.add(panHorse);
-        this.add(panHorseOpt);*/
-
-       boxUpper = Box.createHorizontalBox();
-   	   Box boxUpper1 = Box.createVerticalBox();
-   	   Box boxUpper2 = Box.createVerticalBox();
-  
-       
-       boxUpper1.add(atmoLabel);       
-       boxUpper1.add(atmoCombo);
-       //boxUpper1.add(Box.createVerticalStrut(10));
-       boxUpper1.add(percorsoLabel);       
-       boxUpper1.add(bkgCombo);          
-//       boxUpper1.add(Box.createHorizontalStrut(20));  
-       
-       boxUpper2.add(languageLabel);
-       boxUpper2.add(languageCombo);
-       //boxUpper2.add(Box.createVerticalStrut(10));
-       boxUpper2.add(numehorseLabel);
-       boxUpper2.add(numhorseField);  
-//       boxUpper2.add(Box.createHorizontalStrut(20));
-       
- /*      boxUpper.add(Box.createHorizontalStrut(100));
-       boxUpper.add(boxUpper1);
-       boxUpper.add(Box.createHorizontalStrut(100));
-       boxUpper.add(boxUpper2);
-       boxUpper.add(Box.createHorizontalStrut(150));
-   */    
-      	panHorse.setBorder(new TitledBorder(new EtchedBorder(),""));
-      	panHorse.add(boxUpper1,BorderLayout.CENTER);
-      	panHorseOpt.setBorder(new TitledBorder(new EtchedBorder(),""));
-      	panHorseOpt.add(boxUpper2,BorderLayout.CENTER);
-
-      	boxUpper.add(panHorse);
-//      	boxUpper.add(Box.createHorizontalStrut(5));        		
-    	boxUpper.add(panHorseOpt); 
-       
-       
-       
-       
-       Box boxVerticalLeft = Box.createVerticalBox();
-             
-//        panHorseImg.setLayout(new GridLayout(5,2,10,10));
-        Graphics g=this.getGraphics();
-
-        Image hh;
-    	java.util.Vector <horse> horseshow =new java.util.Vector(1,1);
-       	for (int i=0;i<numhorse/2;i++) {
-      		horseshow.addElement(new horse(i+1,end,step));
-        		hh=horseshow.get(i).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);      
-                boxVerticalLeft.add(Box.createHorizontalStrut(50));
-        		boxVerticalLeft.add(new JLabel(new ImageIcon(hh)));
-        		boxVerticalLeft.add(new JLabel(horseshow.get(i).getHorseName()));
-      	}    
-        Box boxVerticalRight = Box.createVerticalBox();
-       	for (int i=numhorse/2;i<numhorse;i++) {
-      		horseshow.addElement(new horse(i+1,end,step));
-        		hh=horseshow.get(i).getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH);
-        		boxVerticalRight.add(Box.createHorizontalStrut(50));        		
-        		boxVerticalRight.add(new JLabel(new ImageIcon(hh)));
-        		boxVerticalRight.add(new JLabel(horseshow.get(i).getHorseName()));        		
-      	} 
-       	panHorseImgRight.add(boxVerticalRight);
-       	panHorseImgLeft.add(boxVerticalLeft);
- //      	panHorseImg.setVisible(true);
- //       this.add(panHorseImg,"Center");
-//        this.add(boxUpper);    
+    
+    
+    
+    
    
-     	
-     	boxCenter = Box.createHorizontalBox();
-     	boxCenter.add(panHorseImgRight);
-     	boxCenter.add(panHorseImgLeft);
-     	
-     	boxBottom = Box.createHorizontalBox();
-        boxBottom.add(btnStart);     
-        BoxLayout box=new BoxLayout(this,BoxLayout.Y_AXIS);
-        this.setLayout(box);
-        this.add(boxUpper);
-        this.add(Box.createVerticalStrut(100));
-        this.add(boxCenter);
-        this.add(boxBottom);
-//        this.add(boxUpper,BorderLayout.NORTH);
-    	
- //       this.add(panHorse);
- //      	this.add(panHorseOpt);
-//        this.add(boxVerticalLeft,BorderLayout.WEST);
- //       this.add(boxVerticalRight,BorderLayout.EAST);
+
     
-        languageCombo.addActionListener(this);
-        btnStart.addActionListener(this);
-        ClipSound(clipRace,false);
-        ClipSound(clipWin,false);
-        ClipSound(clipMenu,true);
-             
-   	} 
+    
+    
+    /**
+	 * Metodo per attivare o disattivare il suono
+	 * @param clipsound Clip
+	 * @param state boolean
+	 */
     
     private void ClipSound(Clip clipsound,boolean state)
     {
@@ -511,6 +387,10 @@ public class race extends JPanel  implements ActionListener{
  
     }
   
+    /**
+	 * Metodo per la gestione dei possibili eventi di interazione con l'utente attraverso il menu'
+	 * @param e ActionEvent
+	 */
     
     public void actionPerformed(ActionEvent e)
     { 
@@ -571,7 +451,9 @@ public class race extends JPanel  implements ActionListener{
     	}		
 
     }  
-    
+    /**
+	 * Metodo che visualizza o nasconde il menu in base allo stato attuale del gioco. (Esempio: durante la gara il menu' iniziale viene nascosto)
+	 */
     private void panelMenuSetStatus(boolean status)
     {
      	btnStart.setText(msgB.GetResourceValue("btn_start"));
@@ -579,13 +461,17 @@ public class race extends JPanel  implements ActionListener{
     	boxCenter.setVisible(status);
     	boxBottom.setVisible(status);
 	}
+    /**
+	 * Metodo che visualizza o nasconde il pulsante presente durante la premiazione
+	 */
     private void panelMenu1SetStatus(boolean status)
     {
-   	btnStart.setText(msgB.GetResourceValue("btn_restart"));
-  //  	btnStart.setVisible(status);
-   	
+   	btnStart.setText(msgB.GetResourceValue("btn_restart"));	
     	boxBottom.setVisible(status);
 	}   
+    /**
+	 * Metodo che permette il cambio della lingua
+	 */
     private void chgLanguage()
     {
     	if(languageCombo.getSelectedItem().toString().equals("IT"))
@@ -593,6 +479,9 @@ public class race extends JPanel  implements ActionListener{
     	else
     		msgB.SetLanguage("en", "US");
     } 
+    /**
+	 * Metodo che imposta i componenti del menu' in base alla lingua scelta
+	 */
     private void buildComponent()
     {
     	int i;
@@ -611,8 +500,7 @@ public class race extends JPanel  implements ActionListener{
         for( i=0;i<itemCount;i++){
         	languageCombo.removeItemAt(0);
          }
-    
-  //      remove(panHorse);        
+          
         
         bkgCombo.addItem(msgB.GetResourceValue("bkg_sand"));
         bkgCombo.addItem(msgB.GetResourceValue("bkg_field"));
@@ -641,12 +529,6 @@ public class race extends JPanel  implements ActionListener{
         atmoCombo.addItem(msgB.GetResourceValue("atmo_stormwind"));
         atmoCombo.addItem(msgB.GetResourceValue("atmo_snow"));
         
- //        panHorse.add(atmoLabel);       
-//       panHorse.add(atmoCombo);
-      
-  
-//        panHorse.add(percorsoLabel);       
-//        panHorse.add(bkgCombo)
         if(firstrace)
         	btnStart.setText(msgB.GetResourceValue("btn_start"));
         else
@@ -656,16 +538,12 @@ public class race extends JPanel  implements ActionListener{
     	percorsoLabel.setText(msgB.GetResourceValue("label_place"));
     	languageLabel.setText(msgB.GetResourceValue("label_language"));
     	soundCheckBox.setText(msgB.GetResourceValue("label_sound"));
-   /*   	btnStart = new JButton("Partenza");
-    	numehorseLabel = new JLabel("Numero di cavalli",JLabel.RIGHT);
-    	atmoLabel = new JLabel("Condizioni atmosferiche",JLabel.RIGHT);
-    	percorsoLabel = new JLabel("Percorso",JLabel.RIGHT);
-    	languageLabel = new JLabel("Linguaggio",JLabel.RIGHT);
-*/
     	
     }
     
-    
+    /**
+	 * Metodo che permette il caricamento delle immagini dei numeri per la classifica
+	 */
     private void loadNumberimg()
    	{   
     	try {
@@ -682,11 +560,12 @@ public class race extends JPanel  implements ActionListener{
            	imgNum.addElement( ImageIO.read(getClass().getResourceAsStream("/img/num/10.png")));
  
 		} catch (IOException e1) {
-		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
    	}
-    
+    /**
+	 * Metodo che permette il caricamento delle immagini delle coppe per la premiazione
+	 */
     private void loadCup()
    	{   
     	try {
@@ -696,20 +575,23 @@ public class race extends JPanel  implements ActionListener{
            	imgCup.addElement( ImageIO.read(getClass().getResourceAsStream("/img/cup/coppaBronzo.png")));
   
 		} catch (IOException e1) {
-		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
    	}
     
-    
+    /**
+	 * Metodo che permette l'impostazione delle condizioni atmosferiche scelte
+	 */
     private void SetAtmo()
     {
     	atmo=MessagesBundle.GetResourceKey(atmoCombo.getSelectedItem().toString());
 	}
+    /**
+	 * Metodo che permette il caricamento del background scelto
+	 */
     private void loadBKGimg()
    	{  	
     	String bkgstr,filebkg=null;
-//    	bkgstr=bkgCombo.getSelectedItem().toString();
     	bkgstr=MessagesBundle.GetResourceKey(bkgCombo.getSelectedItem().toString());
   	  
 		if(bkgstr.contentEquals("bkg_sand"))
@@ -730,11 +612,12 @@ public class race extends JPanel  implements ActionListener{
 			if(filebkg!=null)
 				imagebkg=(BufferedImage) ImageIO.read(getClass().getResourceAsStream(filebkg));    					
 		} catch (IOException e1) {
-		// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 }
-         
+    /**
+	 * Metodo che permette l'inizializzazione della posizione dei cavalli e il loro avvio
+	 */
     private void initHorses(){
     	if(h.size()!=0)
     		h.clear();
@@ -745,6 +628,9 @@ public class race extends JPanel  implements ActionListener{
     		h.get(i).start();
     	}
 	}
+    /**
+   	 * Metodo che permette l'inizializzazione della posizione dei cavalli vincitori e il loro avvio
+   	 */
     private void initHorsesWinner(){
     	if(horsewinner.size()!=0)
     		horsewinner.clear();
@@ -756,7 +642,10 @@ public class race extends JPanel  implements ActionListener{
     	}
 	} 
 
-
+    /**
+   	 * Override del metodo paintComponent per disegnare background, corsie, cavalli, meteo e numeri
+   	 * @param g Graphics
+   	 */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -775,7 +664,10 @@ public class race extends JPanel  implements ActionListener{
 
         }
     }
-    
+    /**
+   	 * Metodo che disegna i numeri della classifica
+   	 * @param g Graphics
+   	 */
     private void drawNumber(Graphics g) {
 			
 			int i,horsenum;
@@ -784,11 +676,18 @@ public class race extends JPanel  implements ActionListener{
 	    	    g.drawImage(imgNum.get(i), end-50, h.get(horsenum).getPosY()-height/3, this);
 	      	}
 	}
+    /**
+   	 * Metodo che disegna il background
+   	 * @param g Graphics
+   	 */
     private void drawBackground(Graphics g) {
         g.drawImage(imagebkg, 0, 0, this);     
         
 	}  
-    
+    /**
+   	 * Metodo che disegna i cavalli
+   	 * @param g Graphics
+   	 */
     private void drawHorse(Graphics g) {
     	Image hh;
     	BufferedImage hh1 = null,hh2=null;
@@ -799,7 +698,10 @@ public class race extends JPanel  implements ActionListener{
     	 }
         Toolkit.getDefaultToolkit().sync();
     }
-
+    /**
+   	 * Metodo che disegna i cavalli vincitori
+   	 * @param g Graphics
+   	 */
     private void drawHorseWinner(Graphics g) {
     	Image hh;
     	BufferedImage hh1 = null,hh2=null;
@@ -815,7 +717,10 @@ public class race extends JPanel  implements ActionListener{
     	 }
         Toolkit.getDefaultToolkit().sync();
     }
-    
+    /**
+   	 * Metodo che disegna le coppe
+   	 * @param g Graphics
+   	 */
     private void drawPrizeGiving(Graphics g){
  		int horsenum;
  		Image hh;
@@ -834,7 +739,10 @@ public class race extends JPanel  implements ActionListener{
 
 }
 
-    
+    /**
+   	 * Metodo che disegna le corsie
+   	 * @param g Graphics
+   	 */
     private void drawCorsie(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
 
@@ -856,13 +764,18 @@ public class race extends JPanel  implements ActionListener{
 		g.drawLine(0,i*corsia, end,i*corsia);   
 	    	  
 	}
-    
+    /**
+   	 * Metodo che disegna il meteo
+   	 * @param g Graphics
+   	 */
     private void drawWater(Graphics g)  {
     	weat.buildWeather();
     	g.drawImage(weat.getImage(), 0, 0, this);
     }    
     
-     
+    /**
+   	 * Metodo che controlla l'arrivo dei cavalli per la classifica
+   	 */
     private void checkWin() {
 
     	    	int i;
@@ -894,7 +807,9 @@ public class race extends JPanel  implements ActionListener{
     	      	} 
     	    }
     
-    
+    /**
+   	 * Metodo che controlla l'arrivo dei cavalli vincitori in prossimita' delle coppe
+   	 */
     private void checkEndPrizeGiving() {
 
     	int i,allprice;
@@ -908,18 +823,11 @@ public class race extends JPanel  implements ActionListener{
       			allprice++;
       		}
       	}
-    	
-    	        	
-      	if(allprice==numhorseWinner){
-   //   		firstrace=false;
-  //    		start=false;
- //     		pricegiving=false;
- 
-      			;    		
-//      		panelMenu1SetStatus(true);  	    	
-      	}     
+    	     
     }
-    	
+    /**
+   	 * Metodo che permette ai cavalli di muoversi 
+   	 */
     private void moveHorse() {    	
 
     	 if(start)
@@ -931,6 +839,9 @@ public class race extends JPanel  implements ActionListener{
 
         Toolkit.getDefaultToolkit().sync();
     }
+    /**
+   	 * Classe che gestisce la schedulazione del movimento dei cavalli attraverso un timer
+   	 */
     private class ScheduleTask extends TimerTask {
 
         @Override
