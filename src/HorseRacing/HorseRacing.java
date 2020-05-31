@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 
 /**
  * Classe contenente il main e che gestisce l'istanza della classe Race
+ * 
  * @author Patrissi Mathilde
  */
 
