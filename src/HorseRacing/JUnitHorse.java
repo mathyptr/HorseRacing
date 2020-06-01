@@ -41,6 +41,25 @@ class JUnitHorse {
 	}
 
 	@Test
+	void testLanguage() { //verifico che il caricamento della lingua avvenga correttamente
+		String label_numehorse, label_atmo;
+
+		assertTrue(msgB.GetResourceValue("label_numehorse").equals("Numero di cavalli"));
+		assertTrue(msgB.GetResourceValue("label_atmo").equals("Meteo"));
+		assertTrue(msgB.GetResourceValue("error_on_num_horse").equals("Devi inserire un numero intero!!!"));
+	}
+
+	@Test
+	void testChangeLanguage() {//verifico che il cambio della lingua avvenga correttamente
+		msgB.SetLanguage("en", "US");
+
+		assertTrue(msgB.GetResourceValue("label_numehorse").equals("Horses' number"));
+		assertTrue(msgB.GetResourceValue("label_atmo").equals("Weather"));
+		assertTrue(msgB.GetResourceValue("error_on_num_horse").equals("You must insert an integer!!!"));
+
+	}
+
+	@Test
 	void testHorseName() { //verifico che il caricamento del nome dei cavalli e' avvenuto correttamente
 
 		movement mov = new movement();
@@ -58,26 +77,7 @@ class JUnitHorse {
 		assertTrue(msgB.GetResourceValue("name_horse10").equals("Kyros"));
 
 	}
-
-	@Test
-	void testLanguage() { //verifico che il caricamento della lingua avvenga correttamente
-		String label_numehorse, label_atmo;
-
-		assertTrue(msgB.GetResourceValue("label_numehorse").equals("Numero di cavalli"));
-		assertTrue(msgB.GetResourceValue("label_atmo").equals("Condizioni atmosferiche"));
-		assertTrue(msgB.GetResourceValue("error_on_num_horse").equals("Devi inserire un numero intero!!!"));
-	}
-
-	@Test
-	void testChangeLanguage() {//verifico che il cambio della lingua avvenga correttamente
-		msgB.SetLanguage("en", "US");
-
-		assertTrue(msgB.GetResourceValue("label_numehorse").equals("Number of horses"));
-		assertTrue(msgB.GetResourceValue("label_atmo").equals("weather"));
-		assertTrue(msgB.GetResourceValue("error_on_num_horse").equals("You must insert an integer!!!"));
-
-	}
-
+	
 	@Test
 	void testRace() { //effettuo un test su una corsa impostando un cavallo con una velocita' notevolmente superiore a quella degli altri cavalli, in modo tale da poter verificare che sia effettivamente il primo a giungere al traguardo
 		java.util.Vector<horse> h = new java.util.Vector(1, 1);
@@ -97,7 +97,7 @@ class JUnitHorse {
 			h.get(i).setPosY(INITIAL_Y + i * corsia);
 		}
 
-		h.get(0).setspeed(60);
+		h.get(0).setspeed(60); //imposto la velocità del cavallo numero 0 ad un valore tre volte superiore alla massima velocità che possono assumere gli altri cavalli
 
 		for (int i = 0; i < numhorse; i++) {
 			h.get(i).start();

@@ -136,12 +136,12 @@ public class race extends JPanel implements ActionListener {
 	public race() {
 		numhorse = 10;
 
-		msgB.SetLanguage("it", "IT");
-		loadNumberimg();
-		loadCup();
+		msgB.SetLanguage("it", "IT"); //setto come lingua di default italiano
+		loadNumberimg(); //carico le immagini dei numeri
+		loadCup();  //carico le immagini delle coppe
 		step = new movement();
 		priceposition = B_WIDTH / 2;
-		try {
+		try { //apertura file audio relativi al menu', alla corsa e alla premiazione
 			AudioInputStream audioIn = AudioSystem
 					.getAudioInputStream(new BufferedInputStream(getClass().getResourceAsStream("/music/Menu.wav")));
 			clipMenu = AudioSystem.getClip();
@@ -168,9 +168,9 @@ public class race extends JPanel implements ActionListener {
 	 * gestiscono i cavalli, il meteo e la musica
 	 */
 	private void startRace() {
-		end = B_WIDTH - width;
+		end = B_WIDTH - width; //end è la coordinata dopo la quale inizia il tile del traguardo
 
-		weat = new weather(B_WIDTH, B_HEIGHT, width, height, atmo);
+		weat = new weather(B_WIDTH, B_HEIGHT, width, height, atmo); //inizializzo la classe che gestisce il layer per le condizioni atmosferiche
 
 		if (winner.size() != 0)
 			winner.clear();
@@ -183,7 +183,7 @@ public class race extends JPanel implements ActionListener {
 		x = INITIAL_X;
 		y = INITIAL_Y;
 		start = true;
-		timer = new Timer();
+		timer = new Timer(); //imposto il timer che darà la cadenza temporale per il rilascio di un movimento
 		timer.scheduleAtFixedRate(new ScheduleTask(), INITIAL_DELAY, PERIOD_INTERVAL);
 	}
 
@@ -191,7 +191,7 @@ public class race extends JPanel implements ActionListener {
 	 * Metodo per l'implementazione dell'interfaccia menu' iniziale
 	 */
 
-	private void Menu() {
+	private void Menu() { //menu principale per gestire condizioni atmosferiche, percorso, numero di cavalli, lingua e suono
 
 		btnStart = new JButton();
 		Border edge = BorderFactory.createRaisedBevelBorder();
@@ -315,12 +315,11 @@ public class race extends JPanel implements ActionListener {
 	 * @param state     boolean
 	 */
 
-	private void ClipSound(Clip clipsound, boolean state) {
+	private void ClipSound(Clip clipsound, boolean state) { 
 		if (soundON)
 			if (state) {
 				try {
 					clipsound.loop(100);
-//    				clipsound.LOOP_CONTINUOUSLY;
 				} catch (Exception e) {
 					System.out.println("errore on sound: " + e.toString());
 				}
@@ -339,10 +338,10 @@ public class race extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String pulsante = e.getActionCommand();
 
-		if (pulsante.contentEquals("comboBoxChanged")) {
+		if (pulsante.contentEquals("comboBoxChanged")) { //quando viene selezionata la lingua vengono richiamati i metodi seguenti
 			chgLanguage();
 			buildComponent();
-		} else if (MessagesBundle.GetResourceKey(pulsante).contentEquals("label_sound")) {
+		} else if (MessagesBundle.GetResourceKey(pulsante).contentEquals("label_sound")) { //se viene spuntata la casella del suono viene attivato l'audio
 			boolean s = soundCheckBox.isSelected();
 			if (s) {
 				soundON = s;
@@ -352,7 +351,7 @@ public class race extends JPanel implements ActionListener {
 				soundON = s;
 			}
 
-		} else if (pulsante.contentEquals(MessagesBundle.GetResourceValue("btn_start"))) {
+		} else if (pulsante.contentEquals(MessagesBundle.GetResourceValue("btn_start"))) { //se viene premuto il tasto in questione vengono lette le opzioni settate dall'utente ed avviata la corsa
 			loadBKGimg();
 			try {
 				numhorse = Integer.parseInt(numhorseField.getText());
@@ -592,13 +591,13 @@ public class race extends JPanel implements ActionListener {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		if (start) {
+		if (start) { //se siamo nella fase di corsa vengono visualizzati tutti i layer
 			drawBackground(g);
 			drawCorsie(g);
 			drawHorse(g);
 			drawWater(g);
 			drawNumber(g);
-		} else if (pricegiving) {
+		} else if (pricegiving) {//se siamo nella fase di premiazione vengono visualizzati il layer per il background e per i cavalli vincitori
 			drawBackground(g);
 			drawHorseWinner(g);
 
